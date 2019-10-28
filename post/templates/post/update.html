@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Forum | Update Post {% endblock title %}
+{% block content %}
+{% load crispy_forms_tags %}
+<div class="container-fluid">
+    <h1 class="text-center">Update post</h1><hr>
+    <div class="container">
+        <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+            {{ form.media }}
+            {{ form.title | as_crispy_field }}
+            {{ form.desc | as_crispy_field }}
+            <button type="submit" class="btn btn-outline-success">Kirim</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Forum | Login{% endblock %}
+
+{% block content %}
+
+{% load crispy_forms_tags %}
+<div class="container-fluid">
+    <div class="container text-center">
+        <center>
+            <div class="card mt-2 mr-5 ml-5">
+                <div class="card-header">
+                    <h1 class="display-4">Login</h1>
+                </div>
+                <div class="card-body">
+                    <form method="POST">{% csrf_token %}
+                            <div class="form-group col-md-4 mb-0">
+                                {{ form.username|as_crispy_field }}
+                                {{ form.password|as_crispy_field }}
+                            </div><hr>
+                        <button type="submit" class="btn btn-outline-success">Masuk</button>
+                    </form>
+                </div>
+            </div>
+        </center>
+    </div>
+</div>
+{% endblock content %}

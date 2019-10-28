@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}Forum | {{ obj.title }} {% endblock title %}
+
+{% block content %}
+    <div class="container-fluid pl-5 pr-5 mt-3">
+        <div class="row">
+            <div class="col-sm-3 border-right">
+                <div class="container">
+                    <!-- form pencarian -->
+                        {% if user.is_authenticated %}
+                            <h3 class="p-3 border-bottom text-center">Menu</h3>
+                            <a href="{% url 'post:create' %}" class="btn btn-success btn-sm">Buat Post</a>
+                            <a href="#" class="btn btn-success btn-sm">Post Saya</a>
+                            <h3 class="p-3 border-bottom text-center mt-4">Danger zone</h3>
+                            <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm mt-3">Keluar</a>
+                        {% else %}
+                            <p class="lead mt-4 p-5">Kamu belum login, silahkan login <a href="{% url 'login' %}" class="btn btn-success btn-sm">Disini</a></p>
+                        {% endif %}
+                    </div>
+                    <!-- /form pencarian -->
+                </div>
+            <div class="col">
+                <div class="container-fluid">
+                    <div class="container bg-white p-4 mb-5">
+                        <center>
+                            <img src="{{obj.image.url}}" style="width: 400px; width: 200px;">
+                            <h1 class="display-4">{{obj.title}}</h1><hr>
+                        </center>
+                        <div class="row text-center">
+                            <div class="col-sm"><small>Dipost oleh: {{obj.author}}</small></div>
+                            <div class="col-sm"><small>Dibuat dari: {{obj.created_at}}</small></div>
+                            <div class="col-sm"><small>Kategori: {{obj.category}}</small></div>
+                            <div class="col-sm"><small>Jumlah komentar: {{comment.count}}</small></div>
+                        </div>
+                        <hr>
+            
+                        <p class="lead">
+                            {{ obj.desc | safe }}
+                        </p>
+                    </div>
+            
+                    <div class="container-fluid mb-4">
+                        {% if user.is_authenticated %}
+                        <div class="container bg-white p-3 mb-5">
+                            <h4>Beri komentar</h4><hr>
+                            <form method="post">{% csrf_token %}
+                                {{form_comment.media}}
+                                {{form_comment}}
+                                <button type="submit" class="mt-3 btn btn-outline-success">Kirim</button>
+                            </form>
+                        </div>
+                        {% else %}
+                        {% endif %}
+            
+                        <div class="container bg-white p-3 mt-5">
+                            <h4>Jumlah komentar: {{comment.count}}</h4>
+                            {% for comments in comment %}
+                            <hr>
+                            <div class="row p-2">
+                                <div class="col-3">
+                                    <h5>{{ comments.author }}</h5><hr>
+                                    {{ comments.created_at }}
+                                </div>
+                                <div class="col-9 border-left">
+                                    {{ comments.desc | safe }}
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

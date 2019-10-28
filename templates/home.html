@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block title %} Forum | Beranda  {% endblock title %}
+{% block content %}
+<div class="container-fluid pr-5 pl-5 mt-2">
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="container">
+                <!-- form pencarian -->
+                <div class="col bg-white p-4 mb-5 border-right">
+                    <h3 class="p-3 border-bottom text-center">Form pencarian</h3>
+                    {% load crispy_forms_tags %}
+                    <form method="post"> {% csrf_token %}
+                        {{ filter.form.title | as_crispy_field}}
+                        {{ filter.form.category | as_crispy_field}}
+                        {{ filter.form.author | as_crispy_field}}
+                        <button type="submit" class="btn btn-outline-success">Cari</button>
+                    </form>
+                        {% if user.is_authenticated %}
+                            <h3 class="p-3 border-bottom text-center">Menu</h3>
+                            <a href="{% url 'post:create' %}" class="btn btn-success btn-sm">Buat Post</a>
+                            <a href="{% url 'post:my_post' %}" class="btn btn-success btn-sm">Post Saya</a>
+                            <h3 class="p-3 border-bottom text-center mt-4">Danger zone</h3>
+                            <a href="{% url 'logout' %}" class="btn btn-outline-danger btn-sm mt-3">Keluar</a>
+                        {% else %}
+                        {% endif %}
+                </div>
+                <!-- /form pencarian -->
+            </div>
+        </div>
+
+        <div class="col">
+            <!-- jumbotron -->
+            {% if user.is_authenticated %}
+            <div class="jumbotron jumbotron-fluid bg-white border">
+                <div class="container text-center">
+                    <h1 class="display-4">Selamat datang, {{user}}</h1>
+                    <p class="lead">Silahkan lihat diskusi forum dibawah, jika ingin membuat forum, klik<br> <a href="{% url 'post:create' %}" class="btn btn-success btn-lg mt-2">Disini</a></p>
+                </div>
+            </div>
+            {% else %}
+            <div class="jumbotron jumbotron-fluid bg-white border">
+                <div class="container text-center">
+                    <h1 class="display-4">Ups, kamu belum login ke forum ini</h1>
+                    <p class="lead">Untuk melakukan login ke forum, klik<br> <a href="{% url 'login' %}" class="btn btn-success btn-lg mt-2">Disini</a></p>
+                </div>
+            </div>
+            {% endif %}
+            <!-- /jumbotron -->
+            <!-- looping post -->
+            <div class="row">
+                {% for post in filter.qs %}
+                    <div class="col-sm mb-2">
+                        <div class="card p-2" style="height: 23rem; min-width: 8rem;">
+                            {% if post.image %}
+                            <img src="{{post.image.url}}" class="card-img-top p-2" style="width: 180px; height: 120px;">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{post.title | truncatechars:40}}</h5>
+                                <p class="card-text">Diposting oleh: {{post.author}}</p>
+                                <p class="text-muted">{{post.created_at}}</p>
+                                <a href="/post/detail/{{post.slug}}" class="btn btn-primary">Masuk Forum</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <!-- /looping post -->
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+
+
+
+
+
+
